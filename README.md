@@ -1,102 +1,146 @@
-
 # Solar Data Discovery — Week 0
 
 ## Project Overview
 
-This project is part of the **Solar Data Discovery Challenge**, focusing on analyzing solar farm datasets from **Benin, Sierra Leone, and Togo**.  
-The purpose of **Week 0** is to set up the project environment, version control, automation workflow, and prepare datasets for upcoming exploratory data analysis (EDA) and dashboard development.
+This project is part of the **Solar Data Discovery Challenge**, focusing on analyzing solar farm datasets from **Benin, Sierra Leone, and Togo**.
+The purpose of **Week 0** is to set up the project environment, version control, automation workflow, perform initial data exploration, and develop an interactive dashboard.
 
-### Key Objectives
+**Deployed Dashboard:** [Solar Dashboard Insights](https://solar-dashboard-insight.streamlit.app/)
 
-- Set up Python environment and required dependencies  
-- Implement **GitHub version control** (branching strategy, commits, repo organization)  
-- Create **CI/CD pipeline** using GitHub Actions  
-- Document setup instructions and structure  
-- Prepare datasets for incoming analysis
+---
+
+## Key Objectives
+
+* Set up Python environment and required dependencies
+* Implement **GitHub version control** (branching strategy, commits, repo organization)
+* Create **CI/CD pipeline** using GitHub Actions
+* Document setup instructions and project structure
+* Prepare datasets for exploratory data analysis (EDA) and dashboard development
+* Design and deploy a **Streamlit interactive dashboard**
 
 ---
 
 ## Environment Setup
 
-Follow these steps to set up the project on your local machine.
-
 ### 1️⃣ Clone the Repository
 
-```sh
+```bash
 git clone https://github.com/MekdelawitGebre/solar-challenge-week0.git
-
 cd solar-challenge-week0
 ```
 
 ### 2️⃣ Create a Python Virtual Environment
 
-```sh
+```bash
 python -m venv .venv
 ```
 
 ### 3️⃣ Activate the Environment
 
 **Windows (PowerShell):**
-```sh
+
+```bash
 .\.venv\Scripts\Activate.ps1
 ```
 
 **Windows (Command Prompt):**
-```sh
-.\.venv\Scriptsctivate.bat
+
+```bash
+.\.venv\Scripts\activate.bat
 ```
 
 **macOS / Linux:**
-```sh
+
+```bash
 source .venv/bin/activate
 ```
 
 ### 4️⃣ Upgrade pip (optional but recommended)
 
-```sh
+```bash
 python -m pip install --upgrade pip
 ```
 
 ### 5️⃣ Install Dependencies
 
-```sh
+```bash
 pip install -r requirements.txt
 ```
 
 ### 6️⃣ Verify Installation
 
-```sh
+```bash
 python --version
 pip list
 ```
 
-✅ Your environment is now ready for notebooks, Python scripts, and dashboard development.
+Your environment is now ready for notebooks, Python scripts, and dashboard development.
 
 ---
 
-## CI/CD Setup (GitHub Actions)
+## Tasks Completed
 
-This project uses **GitHub Actions** for continuous integration.
+### Task 1 — Git & Environment Setup 
 
-- Workflow file: `.github/workflows/ci.yml`
-- Triggered on: `push` and `pull_request`
-- Steps performed:
-  - Check out repository
-  - Set up Python **3.11**
-  - Install dependencies
-  - Run basic validation (e.g., Python version test)
+* Initialized GitHub repo and created `setup-task` branch
+* Added `.gitignore` (including `data/`), `requirements.txt`, and GitHub Actions workflow
+* Merged setup-task into `main`
 
-### Example: Run CI steps locally 
+### Task 2 — Data Profiling, Cleaning & EDA 
 
-```sh
-# Activate venv
+* Created EDA notebooks for each country (`benin_eda.ipynb`, etc.)
+* Performed:
+
+  * Summary statistics, missing-value report, outlier detection
+  * Cleaning: drop or impute missing/incorrect values
+  * Time-series analysis and visualizations (GHI, DNI, DHI, Tamb)
+  * Correlation heatmaps, scatter plots, histograms, bubble charts
+* Exported cleaned datasets locally (ignored in Git)
+
+### Task 3 — Cross-Country Comparison 
+
+* Created `compare-countries` branch
+* Loaded all three cleaned datasets
+* Compared metrics (GHI, DNI, DHI) with:
+
+  * Side-by-side boxplots
+  * Summary table (mean, median, standard deviation)
+  * ANOVA/Kruskal–Wallis tests
+* Added key observations and optional bar chart ranking countries by GHI
+
+### Bonus — Interactive Dashboard (Streamlit) 
+
+* Created `dashboard-dev` branch
+* Developed `app/main.py` with:
+
+  * Country selection widget
+  * Upload CSV feature
+  * GHI boxplots
+  * Top regions table
+* Developed `app/utils.py` with reusable functions:
+
+  * `load_uploaded_data()`
+  * `plot_ghi_boxplot()`
+  * `compare_countries_barplot()`
+* Deployed on Streamlit Community Cloud: [https://solar-dashboard-insight.streamlit.app/](https://solar-dashboard-insight.streamlit.app/)
+* Ensured `data/` folder is ignored in Git
+
+---
+
+## How to Run the Dashboard Locally
+
+1. Activate virtual environment:
+
+```bash
 .\.venv\Scripts\Activate.ps1
-
-# Run simple test (temporary for Week 0)
-python --version
 ```
 
-The CI ensures every contributor runs the project in a consistent and reproducible environment.
+2. Run Streamlit app:
 
----
+```bash
+streamlit run app/main.py
+```
+
+3. Upload your country CSVs through the dashboard interface and explore insights interactively.
+
 
