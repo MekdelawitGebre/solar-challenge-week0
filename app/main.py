@@ -2,34 +2,44 @@ import sys
 import os
 import streamlit as st
 
-
-# ✅ Add project root to Python path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from app.utils import load_country_data, plot_ghi_boxplot, top_region_table
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from utils import load_uploaded_data, plot_ghi_boxplot,compare_countries_barplot
 
 
-st.set_page_config(page_title="Solar Insights Dashboard", layout="wide")
 
-st.title("Solar Energy Insights Dashboard")
 
-# Sidebar
-st.sidebar.header("Filters")
-country = st.sidebar.selectbox(
-    "Select Country",
-    ["Benin", "Sierra Leone", "Togo"]
-)
+st.set_page_config(page_title="Solar Dashboard", layout="wide")
+st.title("☀ Solar Energy Insights Dashboard")
 
-# Load data dynamically
-df = load_country_data(country)
+# -----------------------------
+# File uploads
+# -----------------------------
+st.sidebar.header("Upload Clean CSVs")
+benin_file = st.sidebar.file_uploader("Upload Benin CSV", type="csv")
+sl_file = st.sidebar.file_uploader("Upload Sierra Leone CSV", type="csv")
+togo_file = st.sidebar.file_uploader("Upload Togo CSV", type="csv")
 
-st.write(f"###  Selected Country: **{country}**")
-st.dataframe(df.head())
+# -----------------------------
+# Load data
+# -----------------------------
+dfs = {}
+dfs["Benin"] = load_uploaded_data(benin_file)
+dfs["Sierra Leone"] = load_uploaded_data(sl_file)
+dfs["Togo"] = load_uploaded_data(togo_file)
 
+# -----------------------------
 # Visualizations
-st.write("### ☀GHI Distribution Comparison")
-plot_ghi_boxplot(df)
+# -----------------------------
+for country, df in dfs.items():
+    if df is not None:
+        st.subheader(f"{country} Data Preview")
+        st.dataframe(df.head())
+        st.subheader(f"{country} GHI Distribution")
+        plot_ghi_boxplot(df, title=f"{country} GHI Boxplot")
 
-# Top regions table
-st.write("###  Top 5 Regions by Solar Potential (GHI)")
-st.table(top_region_table(df))
+# -----------------------------
+# Comparison chart
+# -----------------------------
+if all(df is not None for df in dfs.values()):
+    st.subheader("Comparison of Average GHI Across Countries")
+    compare_countries_barplot(dfs)
