@@ -1,6 +1,13 @@
+import sys
+import os
 import streamlit as st
-import pandas as pd
+
+
+# ✅ Add project root to Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from app.utils import load_country_data, plot_ghi_boxplot, top_region_table
+
 
 st.set_page_config(page_title="Solar Insights Dashboard", layout="wide")
 
